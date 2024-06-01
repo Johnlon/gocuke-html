@@ -1,0 +1,29 @@
+<div class="scenario-card">
+    <div class="scenario-card-header" id="{{.Id}}-header" onclick='showHide("{{.Id}}")'>
+        <div class="scenario-card-header-left">
+            <div class="scenario-card-tags">
+                {{.Tags}}
+            </div>
+            <div class="scenario-card-title">
+                <span class="material-icons expand-arrow">expand_more</span>
+                <p><span>{{.Keyword}}:</span> {{.Name}}</p>
+            </div>
+        </div>
+        <div class="scenario-card-header-right">
+            <div class="badge bkg-skipped tooltip-skipped top" data-tooltip="Skipped">{{.Skipped}}</div>
+            <div class="badge bkg-undefined tooltip-undefined top" data-tooltip="Undefined">{{.Undefined}}</div>
+            <div class="badge bkg-failed tooltip-failed top" data-tooltip="Failed">{{.Failed}}</div>
+            <div class="badge bkg-passed tooltip-passed top" data-tooltip="Passed">{{.Passed}}</div>
+        </div>
+    </div>
+    <div class="scenario-card-body hide" id="{{.Id}}">
+        <div class="scenario-card-description">
+            {{.Description}}
+        </div>
+        {{.Steps}}
+    </div>
+    <div class="card-bottom">
+        <div class="embed-icon">{{.Embed}}</div>
+        <div class="material-icons-outlined timer-total">timer</div><div class="duration-info">{{.Duration}}</div>
+    </div>
+</div>

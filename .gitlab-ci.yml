@@ -1,0 +1,118 @@
+stages:
+  - build
+  - deploy
+  - tag
+  - prepare
+  - release
+
+variables:
+  PACKAGE_REGISTRY_URL: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${CI_PROJECT_NAME}"
+
+build:
+  stage: build
+  image: golang:1.20-alpine
+  only:
+    - master
+  before_script:
+    - apk update
+    - apk add zip curl
+  script:
+    - |
+      go mod tidy -compat=1.20
+      mkdir builds
+
+      echo "Building APP"
+      GOOS=linux GOARCH=amd64 go build -o builds/gocure_linux_amd64 gocure.go
+      GOOS=darwin GOARCH=amd64 go build -o builds/gocure_darwin_amd64 gocure.go
+      GOOS=windows GOARCH=amd64 go build -o builds/gocure_windows_amd64.exe gocure.go
+      GOOS=linux GOARCH=amd64 go build -o builds/gocureAPI_linux_amd64 api/api.go
+      GOOS=darwin GOARCH=amd64 go build -o builds/gocureAPI_darwin_amd64 api/api.go
+      GOOS=windows GOARCH=amd64 go build -o builds/gocureAPI_windows_amd64.exe api/api.go
+
+      echo "ZIP APP Contents"
+      zip -r -j gocure_linux64.zip builds/gocure_linux_amd64
+      zip -r -j gocure_mac64 builds/gocure_darwin_amd64
+      zip -r -j gocure_win64.zip builds/gocure_windows_amd64.exe
+      zip -r -j gocureAPI_linux64.zip builds/gocureAPI_linux_amd64.exe api/api.go
+      zip -r -j gocureAPI_mac64.zip builds/gocureAPI_darwin_amd64.exe api/api.go
+      zip -r -j gocureAPI_win64.zip builds/gocureAPI_windows_amd64.exe api/api.go
+
+      echo "Submit Package to Package Registry"
+      curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file gocure_linux64.zip ${PACKAGE_REGISTRY_URL}/$(date +%y.%m.%d)/gocure_linux64.zip
+      curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file gocure_mac64.zip ${PACKAGE_REGISTRY_URL}/$(date +%y.%m.%d)/gocure_mac64.zip
+      curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file gocure_win64.zip ${PACKAGE_REGISTRY_URL}/$(date +%y.%m.%d)/gocure_win64.zip
+      curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file gocureAPI_linux64.zip ${PACKAGE_REGISTRY_URL}/$(date +%y.%m.%d)/gocureAPI_linux64.zip
+      curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file gocureAPI_mac64.zip ${PACKAGE_REGISTRY_URL}/$(date +%y.%m.%d)/gocureAPI_mac64.zip
+      curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file gocureAPI_win64.zip ${PACKAGE_REGISTRY_URL}/$(date +%y.%m.%d)/gocureAPI_win64.zip
+  artifacts:
+    paths:
+      - builds/
+    expire_in: 2 hrs
+
+pages:
+  stage: deploy
+  only:
+    - master
+  script:
+    - cp -r docs/. public
+  artifacts:
+    paths:
+    - public
+
+create_tag:
+  stage: tag
+  only:
+    - master
+  dependencies:
+    - build
+  script:
+    - git config user.name "Rodrigo Odhin"
+    - git config user.email rodrigo@odhin.io
+    - git remote add demo-tag-origin https://oauth2:${GITLAB_ACCESS_TOKEN}@gitlab.com/${CI_PROJECT_PATH}
+    - git tag -a "v$(date +%y.%m.%d)" -m "Auto-Release"
+    - git push demo-tag-origin "v$(date +%y.%m.%d)"
+
+prepare_job:
+  stage: prepare                                              # This stage must run before the release stage
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never                                             # Do not run this job when a tag is created manually
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH             # Run this job when commits are pushed or merged to the default branch
+  script:
+    - echo "EXTRA_DESCRIPTION=v$(date +%y.%m.%d) - New Version" >> variables.env  # Generate the EXTRA_DESCRIPTION and TAG environment variables
+    - echo "TAG=$(date +%y.%m.%d)" >> variables.env             # and append to the variables.env file
+  artifacts:
+    reports:
+      dotenv: variables.env                                   # Use artifacts:reports:dotenv to expose the variables to other jobs
+
+release_job:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  needs:
+    - job: prepare_job
+      artifacts: true
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never                                  # Do not run this job when a tag is created manually
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH  # Run this job when commits are pushed or merged to the default branch
+  script:
+    - echo "running release_job for v$TAG"
+  release:
+    name: 'Release v$TAG'
+    description: 'Created using the release-cli $EXTRA_DESCRIPTION'  # $EXTRA_DESCRIPTION and the $TAG
+    tag_name: 'v$TAG'                                                 # variables must be defined elsewhere
+    ref: '$CI_COMMIT_SHA'                                            # in the pipeline. For example, in the
+    assets:
+      links:
+        - name: 'gocure_linux64'
+          url: '${PACKAGE_REGISTRY_URL}/$TAG/gocure_linux64.zip'
+        - name: 'gocure_mac64'
+          url: '${PACKAGE_REGISTRY_URL}/$TAG/gocure_mac64.zip'
+        - name: 'gocure_win64'
+          url: '${PACKAGE_REGISTRY_URL}/$TAG/gocure_win64.zip'
+        - name: 'gocureAPI_linux64'
+          url: '${PACKAGE_REGISTRY_URL}/$TAG/gocureAPI_linux64.zip'
+        - name: 'gocureAPI_mac64'
+          url: '${PACKAGE_REGISTRY_URL}/$TAG/gocureAPI_mac64.zip'
+        - name: 'gocureAPI_win64'
+          url: '${PACKAGE_REGISTRY_URL}/$TAG/gocureAPI_win64.zip'

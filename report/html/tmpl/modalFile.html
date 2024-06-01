@@ -1,0 +1,13 @@
+<div class="embed-row {{.RowClass}}">
+<div class="embed-info">
+<div class="embed-info-left">Type:</div>
+<div class="embed-info-right">{{.MediaType}}</div>
+<div class="embed-info-left">Size:</div>
+<div class="embed-info-right">{{.MediaSize}}</div>
+<div class="embed-info-left">Options:</div>
+<div class="embed-info-right"><div class="embed-options tooltip-embed top" data-tooltip="Download"><a href="data:{{.MediaType}};base64,{{.MediaData}}" download="embed_file.{{.MediaExtension}}"><span class="material-icons" >file_download</span></a></div> {{.PrintOption}} {{.CopyOption}}</div>
+</div>
+<div class="embed-content" id="{{.ContentID}}">
+{{.MediaContent}}
+</div>
+</div>

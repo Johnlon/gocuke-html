@@ -1,0 +1,18 @@
+version: '3'
+services:
+  gocure:
+    container_name: gocure
+    image: rodrigoodhin/gocure:latest
+    volumes:
+      - "$PWD/data:/data"
+      - "/Users:/Users"
+    ports:
+      - "8087:80"
+      - "7087:7087"
+      - "3087:3000"
+    restart: 'always'
+    networks:
+      - gocure_network
+
+networks:
+  gocure_network:

@@ -1,0 +1,13 @@
+.idea
+.vscode
+vendor
+go.sum
+.DS_Store
+website/html/data/embed/output/*
+website/html/data/embed/report/*
+website/html/data/embed/uploads/*
+website/html/data/htmlReport/output/*
+website/html/data/htmlReport/uploads/*
+
+!.gitignore
+!.gitkeep

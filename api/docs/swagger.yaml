@@ -1,0 +1,180 @@
+basePath: /
+definitions:
+  fiber.Map:
+    additionalProperties: true
+    type: object
+  handlers.ResponseData:
+    properties:
+      data:
+        $ref: '#/definitions/fiber.Map'
+      msg:
+        type: string
+    type: object
+  models.Embed:
+    properties:
+      featureIndex:
+        type: integer
+      files:
+        items:
+          type: string
+        type: array
+      inputJsonPath:
+        type: string
+      outputJsonPath:
+        type: string
+      scenarioIndex:
+        type: integer
+      stepIndex:
+        type: integer
+    type: object
+  models.HTML:
+    properties:
+      ignoreBadJsonFiles:
+        type: boolean
+      inputFolderPath:
+        type: string
+      inputJsonPath:
+        type: string
+      mergeFiles:
+        type: boolean
+      metadata:
+        $ref: '#/definitions/models.Metadata'
+      outputHtmlFolder:
+        type: string
+      showEmbeddedFiles:
+        type: boolean
+      title:
+        type: string
+    type: object
+  models.Metadata:
+    properties:
+      appVersion:
+        type: string
+      browser:
+        type: string
+      executed:
+        type: string
+      parallel:
+        type: string
+      platform:
+        type: string
+      testEnvironment:
+        type: string
+    type: object
+host: localhost:7087
+info:
+  contact:
+    email: rodrigo@odhin.io
+    name: Gocure Support
+  description: Swagger for Gocure API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Gocure API
+  version: "1.0"
+paths:
+  /embed/toFeature:
+    post:
+      consumes:
+      - application/json
+      description: embed files to feature of a cucumber report
+      parameters:
+      - description: Embed Info
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/models.Embed'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ResponseData'
+      summary: embed files to feature
+      tags:
+      - embed
+  /embed/toScenario:
+    post:
+      consumes:
+      - application/json
+      description: embed files to scenario of a cucumber report
+      parameters:
+      - description: Embed Info
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/models.Embed'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ResponseData'
+      summary: embed files to scenario
+      tags:
+      - embed
+  /embed/toStep:
+    post:
+      consumes:
+      - application/json
+      description: embed files to step of a cucumber report
+      parameters:
+      - description: Embed Info
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/models.Embed'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ResponseData'
+      summary: embed files to step
+      tags:
+      - embed
+  /html/generate:
+    post:
+      consumes:
+      - application/json
+      description: generate html reports from cucumber report
+      parameters:
+      - description: HTML Info
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/models.HTML'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ResponseData'
+      summary: generate html reports
+      tags:
+      - html
+swagger: "2.0"

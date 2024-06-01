@@ -1,0 +1,67 @@
+[
+    {
+      "uri": "features/OpenGocureRepository.feature",
+      "id": "open-gocure-repository",
+      "keyword": "Feature",
+      "name": "Open Gocure Repository",
+      "description": "",
+      "line": 2,
+      "comments": null,
+      "tags": [{ "name": "@OpenGocureRepository", "line": 1 }],
+      "elements": [
+        {
+          "id": "open-gocure-repository;open-gocure-repository-on-chrome-browser",
+          "keyword": "Scenario",
+          "name": "Open gocure repository on chrome browser",
+          "description": "",
+          "line": 4,
+          "type": "scenario",
+          "tags": [{ "name": "@OpenGocureRepository", "line": 1 }],
+          "steps": [
+            {
+              "keyword": "Given ",
+              "name": "Open website \"https://gitlab.com/rodrigoodhin\"",
+              "line": 5,
+              "match": { "location": "urls.go:12" },
+              "result": {
+                "status": "passed",
+                "error_message": "",
+                "duration": 5059865576
+              },
+              "rows": null,
+              "embeddings": null
+            },
+            {
+              "keyword": "When ",
+              "name": "Click on \"Gocure_Link\"",
+              "line": 6,
+              "match": { "location": "action.go:13" },
+              "result": {
+                "status": "passed",
+                "error_message": "",
+                "duration": 2259546583
+              },
+              "rows": null,
+              "embeddings": null
+            },
+            {
+              "keyword": "Then ",
+              "name": "Page should contain text \"Gocure is a library written in pure Go\"",
+              "line": 7,
+              "match": { "location": "steps.go:532" },
+              "result": {
+                "status": "passed",
+                "error_message": "",
+                "duration": 647274111
+              },
+              "rows": null,
+              "embeddings": null
+            }
+          ],
+          "embeddings": null
+        }
+      ],
+      "embeddings": null
+    }
+  ]
+  

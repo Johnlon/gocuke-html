@@ -1,0 +1,153 @@
+let options = {
+        segmentShowStroke: false,
+        responsive: true,
+        layout: {
+            padding: {
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }
+        },
+        scales: {
+            yAxes: [{
+                gridLines: {
+                    display: false
+                },
+                ticks: {
+                    display: false
+                },
+                scaleLabel: {
+                    display: true
+                }
+            }],
+            xAxes: [{
+                gridLines: {
+                    display: false
+                },
+                ticks: {
+                    display: false
+                },
+            }]
+        },
+        legend: {
+            position: 'right',
+        },
+        animation: {
+            duration: 2200
+        },
+        tooltips: {
+            callbacks: {
+                label: function (tooltipItem, data) {
+                    //get the concerned dataset
+                    let dataset = data.datasets[tooltipItem.datasetIndex];
+                    //calculate the total of this data set
+                    let total = dataset.data.reduce(function (previousValue, currentValue, currentIndex, array) {
+                        return previousValue + currentValue;
+                    });
+                    //get the current items value
+                    let currentValue = dataset.data[tooltipItem.index];
+                    //calculate the percentage based on the total and current item, also this does a rough rounding to give a whole number
+                    let percentage = Math.floor(((currentValue / total) * 100) + 0.5);
+
+                    return " " + currentValue + " / " + percentage + "%";
+                }
+            }
+        },
+        title: {
+            display: true,
+            text: '',
+            fontSize: 20,
+            fontColor: '#616161',
+            fontStyle: 'bold'
+        }
+    }
+
+    let featurePassed = "{{.PassedFeatureChart}}"
+    let featureFailed = "{{.FailedFeatureChart}}"
+    let ctxFeatures = document.getElementById('chart_features').getContext('2d');
+    options.title.text = "Features"
+    let chartFeatures = new Chart(ctxFeatures, {
+        type: 'doughnut',
+        data: {
+            labels: ['Passed ({{.PassedFeatureChart}})', 'Failed ({{.FailedFeatureChart}})'],
+            datasets: [{
+                data: [
+                    parseInt(featurePassed),
+                    parseInt(featureFailed)
+                ],
+                backgroundColor: [
+                    '#2E7D31',
+                    '#C62828'
+                ],
+                borderColor: [
+                    '#2E7D31',
+                    '#C62828'
+                ]
+            }]
+        },
+        options: options
+    });
+
+    let scenarioPassed = "{{.PassedScenarioChart}}"
+    let scenarioFailed = "{{.FailedScenarioChart}}"
+    let ctxScenarios = document.getElementById('chart_scenarios').getContext('2d');
+    options.title.text = "Scenarios"
+    let chartScenarios = new Chart(ctxScenarios, {
+        type: 'doughnut',
+        data: {
+            labels: ['Passed ({{.PassedScenarioChart}})', 'Failed ({{.FailedScenarioChart}})'],
+            datasets: [{
+                data: [
+                    parseInt(scenarioPassed),
+                    parseInt(scenarioFailed)
+                ],
+                backgroundColor: [
+                    '#2E7D31',
+                    '#C62828'
+                ],
+                borderColor: [
+                    '#2E7D31',
+                    '#C62828'
+                ]
+            }]
+        },
+        options: options
+    });
+
+    let stepPassed = "{{.PassedStepChart}}"
+    let stepFailed = "{{.FailedStepChart}}"
+    let stepPending = "{{.UndefinedStepChart}}"
+    let stepSkipped = "{{.SkippedStepChart}}"
+    let ctxSteps = document.getElementById('chart_steps').getContext('2d');
+    options.title.text = "Steps"
+    let chartSteps = new Chart(ctxSteps, {
+        type: 'doughnut',
+        data: {
+            labels: ['Passed ({{.PassedStepChart}})',
+                'Failed ({{.FailedStepChart}})',
+                'Undefined ({{.UndefinedStepChart}})',
+                'Skipped ({{.SkippedStepChart}})'],
+            datasets: [{
+                data: [
+                    parseInt(stepPassed),
+                    parseInt(stepFailed),
+                    parseInt(stepPending),
+                    parseInt(stepSkipped)
+                ],
+                borderColor: [
+                    '#2E7D31',
+                    '#C62828',
+                    '#01579b',
+                    '#ff6f00'
+                ],
+                backgroundColor: [
+                    '#2E7D31',
+                    '#C62828',
+                    '#01579b',
+                    '#ff6f00'
+                ]
+            }]
+        },
+        options: options
+    });

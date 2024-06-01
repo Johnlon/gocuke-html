@@ -1,0 +1,15 @@
+<a href="#{{.ModalID}}" class="tooltip-embed top" data-tooltip="Embeddings"><span class="material-icons-outlined embed-files">topic</span></a>
+<div class="modal" id="{{.ModalID}}" aria-hidden="true">
+<div class="modal-dialog">
+<div class="modal-header">
+  <h2><span class="modal-title-prefix">Embeddings <span class="material-icons">navigate_next</span> {{.Keyword}} <span class="material-icons">navigate_next</span> </span> {{.Name}}</h2>
+  <a href="#" class="btn-close" aria-hidden="true"><span class="material-icons-outlined">close</span></a>
+</div>
+<div class="modal-body">
+  {{.EmbedHTML}}
+</div>
+<div class="modal-footer">
+	<div class="material-icons-outlined timer-total">timer</div><div class="duration-info">{{.Duration}}</div>
+</div>
+</div>
+</div>
