@@ -3,10 +3,10 @@ gocuke-html
 
 gocuke-html is a fork of gocure customised to work with the Cucumber Json file format and some other niceties.
 
-Gocure in turn appears to have be a Golang reimplentation with the UI design of the earlier NodeJS project [Cucumber-Html-Reporter](https://github.com/gkushang/cucumber-html-reporter).
+Gocure in turn appears to have been a Golang reimplentation with the UI design of the earlier NodeJS project [Cucumber-Html-Reporter](https://github.com/gkushang/cucumber-html-reporter).
 
 
-====
+<hr/>
 
 <div align="center">
 
@@ -38,7 +38,7 @@ Gocure in turn appears to have be a Golang reimplentation with the UI design of 
 &nbsp;
 &nbsp;
 
-Gocuke-heml is a library written in Go providing the possibility to generate beautiful html reports and it is also possible to embed any file in your Cucumber json reports. 
+This library written in Go provides the possibility to generate beautiful html reports and it is also possible to embed any file in your Cucumber json reports. 
 
 This can be done importing in a go project, executing a binary, calling a REST API or in a frontend using our docker container.
 
@@ -48,7 +48,7 @@ This library can also help users of other languages, because using our docker im
 &nbsp;
 &nbsp;
 
-### [Full documentation](https://rodrigoodhin.gitlab.io/gocure/)
+### [GoCure documentation still applies](https://rodrigoodhin.gitlab.io/gocure/)
 
 &nbsp;
 &nbsp;
@@ -60,6 +60,3 @@ This library can also help users of other languages, because using our docker im
 &nbsp;
 &nbsp;
 
-### GOCURE It´s a Third-Party Official Tools of Cucumber
-
-![Cucumber Website](https://res.cloudinary.com/odhin/image/upload/v1648635100/projects/gocure/cucumber_website_pxdu8d.png)
