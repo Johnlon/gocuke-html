@@ -1,7 +1,7 @@
 gocuke-html
 ===========
 
-This library written in Go provides beautiful html reports.
+This go library provides beautiful Cucumber HTML reports.
 
 ![Gocuke.png](docs/gocuke-small-nobg3.png)
 
